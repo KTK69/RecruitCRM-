@@ -255,4 +255,4 @@ This application is **fully functional and production-ready** with:
 
 ---
 
-*Built with ❤️ using Next.js, React, and Tailwind CSS*
+*Built with ❤️ using Next.js, and Tailwind CSS*
