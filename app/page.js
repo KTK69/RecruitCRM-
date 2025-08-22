@@ -6,7 +6,8 @@ import {
   Building2, MapPin, Edit, Star, Filter,
   Search, Trash2, Users, Briefcase, 
   MessageSquare, Target, ChevronDown,
-  ExternalLink, UserPlus, Eye
+  ExternalLink, UserPlus, Eye, Moon, Sun,
+  Menu, X
 } from 'lucide-react'
 import './globals.css'
 
@@ -378,6 +379,10 @@ export default function CompanyProfile() {
   const [showActivityModal, setShowActivityModal] = useState(false)
   const [activityType, setActivityType] = useState('')
   const [showViewAssigned, setShowViewAssigned] = useState(false)
+  const [isDarkMode, setIsDarkMode] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isLeftSidebarOpen, setIsLeftSidebarOpen] = useState(false)
+  const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false)
 
   // Calculate activity counts
   const getActivityCounts = () => {
@@ -518,23 +523,83 @@ export default function CompanyProfile() {
     }))
   }
 
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode)
+  }
+
+  // Apply dark class to document for global dark mode styles
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+  }, [isDarkMode])
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen)
+  }
+
+  const toggleLeftSidebar = () => {
+    setIsLeftSidebarOpen(!isLeftSidebarOpen)
+  }
+
+  const toggleRightSidebar = () => {
+    setIsRightSidebarOpen(!isRightSidebarOpen)
+  }
+
   const counts = getActivityCounts()
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className={`min-h-screen transition-colors duration-300 ${
+      isDarkMode 
+        ? 'bg-gradient-to-br from-slate-900 via-gray-900 to-slate-800' 
+        : 'bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50'
+    }`}>
       {/* Top Navigation */}
-      <div className="bg-blue-700 text-white px-4 py-2 text-sm">
+      <div className={`px-4 py-3 text-sm shadow-lg transition-colors duration-300 ${
+        isDarkMode 
+          ? 'bg-gradient-to-r from-slate-800 via-slate-700 to-slate-800 text-white' 
+          : 'bg-gradient-to-r from-blue-700 via-blue-600 to-indigo-700 text-white'
+      }`}>
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <Building2 size={18} />
-            <span>Companies &gt; Page 1</span>
-            <span className="text-blue-200">10 - 1</span>
+          <div className="flex items-center space-x-2 md:space-x-4">
+            {/* Mobile menu button */}
+            <button 
+              onClick={toggleMobileMenu}
+              className="md:hidden p-2 rounded-lg hover:bg-white/10 transition-colors"
+            >
+              <Menu size={20} />
+            </button>
+            
+            <div className={`p-1 rounded-md backdrop-blur-sm ${
+              isDarkMode ? 'bg-white/10' : 'bg-white/10'
+            }`}>
+              <Building2 size={18} />
+            </div>
+            <span className="font-medium hidden sm:inline">Companies &gt; Page 1</span>
+            <span className="font-medium sm:hidden">Companies</span>
+            <span className={`px-2 py-1 rounded-full text-xs hidden sm:inline ${
+              isDarkMode 
+                ? 'text-slate-300 bg-white/10' 
+                : 'text-blue-200 bg-white/10'
+            }`}>10 - 1</span>
           </div>
-          <div className="flex items-center space-x-3">
-            <button className="bg-blue-600 hover:bg-blue-500 px-4 py-1 rounded text-sm">
+          <div className="flex items-center space-x-2 md:space-x-3">
+            <button 
+              onClick={toggleDarkMode}
+              className={`p-2 rounded-lg transition-all duration-200 ${
+                isDarkMode 
+                  ? 'bg-slate-600 hover:bg-slate-500 text-yellow-400' 
+                  : 'bg-white/10 hover:bg-white/20 text-white'
+              }`}
+            >
+              {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
+            <button className="hidden sm:inline-flex bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 px-3 md:px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
               Book a Demo
             </button>
-            <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center font-semibold">
+            <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center font-semibold shadow-md ring-2 ring-white/20">
               TK
             </div>
           </div>
@@ -542,27 +607,75 @@ export default function CompanyProfile() {
       </div>
 
       {/* Company Header */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="px-6 py-6">
+      <div className={`backdrop-blur-sm border-b shadow-sm transition-colors duration-300 ${
+        isDarkMode 
+          ? 'bg-slate-800/80 border-slate-700/60' 
+          : 'bg-white/80 border-gray-200/60'
+      }`}>
+        <div className="px-4 md:px-6 py-4 md:py-6">
           <div className="flex items-start justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                <Building2 className="text-blue-600" size={24} />
+            <div className="flex items-center space-x-3 md:space-x-4">
+              <div className={`w-12 h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl flex items-center justify-center shadow-lg transition-colors duration-300 ${
+                isDarkMode 
+                  ? 'bg-gradient-to-br from-slate-600 to-slate-700 ring-4 ring-slate-600/20' 
+                  : 'bg-gradient-to-br from-blue-500 to-indigo-600 ring-4 ring-blue-50'
+              }`}>
+                <Building2 className="text-white" size={24} />
               </div>
               <div>
-                <h1 className="text-2xl font-semibold text-gray-900">{data.company.name}</h1>
-                <div className="flex items-center text-gray-600 mt-1">
-                  <MapPin size={16} className="mr-1" />
-                  {data.company.location}
+                <h1 className={`text-xl md:text-2xl lg:text-3xl font-bold transition-colors duration-300 ${
+                  isDarkMode 
+                    ? 'bg-gradient-to-r from-slate-100 to-slate-300 bg-clip-text text-transparent' 
+                    : 'bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent'
+                }`}>{data.company.name}</h1>
+                <div className={`flex items-center mt-1 md:mt-2 ${
+                  isDarkMode ? 'text-slate-400' : 'text-gray-600'
+                }`}>
+                  <div className={`p-1 rounded-md mr-2 transition-colors duration-300 ${
+                    isDarkMode ? 'bg-slate-700' : 'bg-blue-50'
+                  }`}>
+                    <MapPin size={14} className={isDarkMode ? 'text-slate-400' : 'text-blue-500'} />
+                  </div>
+                  <span className="font-medium text-sm md:text-base">{data.company.location}</span>
                 </div>
               </div>
             </div>
-            <div className="flex items-center space-x-2">
-              <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded">
-                <Edit size={18} />
+            <div className="flex items-center space-x-1 md:space-x-2">
+              {/* Mobile sidebar toggles */}
+              <button 
+                onClick={toggleLeftSidebar}
+                className={`md:hidden p-2 rounded-lg transition-all duration-200 ${
+                  isDarkMode 
+                    ? 'text-slate-400 hover:text-blue-400 hover:bg-slate-700' 
+                    : 'text-gray-400 hover:text-blue-600 hover:bg-blue-50'
+                }`}
+              >
+                <Users size={18} />
               </button>
-              <button className="p-2 text-gray-400 hover:text-yellow-500 hover:bg-gray-100 rounded">
-                <Star size={18} />
+              <button 
+                onClick={toggleRightSidebar}
+                className={`md:hidden p-2 rounded-lg transition-all duration-200 ${
+                  isDarkMode 
+                    ? 'text-slate-400 hover:text-blue-400 hover:bg-slate-700' 
+                    : 'text-gray-400 hover:text-blue-600 hover:bg-blue-50'
+                }`}
+              >
+                <MessageSquare size={18} />
+              </button>
+              
+              <button className={`p-2 md:p-3 rounded-lg md:rounded-xl transition-all duration-200 group ${
+                isDarkMode 
+                  ? 'text-slate-400 hover:text-blue-400 hover:bg-slate-700' 
+                  : 'text-gray-400 hover:text-blue-600 hover:bg-blue-50'
+              }`}>
+                <Edit size={18} className="group-hover:scale-110 transition-transform" />
+              </button>
+              <button className={`p-2 md:p-3 rounded-lg md:rounded-xl transition-all duration-200 group ${
+                isDarkMode 
+                  ? 'text-slate-400 hover:text-yellow-400 hover:bg-slate-700' 
+                  : 'text-gray-400 hover:text-yellow-500 hover:bg-yellow-50'
+              }`}>
+                <Star size={18} className="group-hover:scale-110 transition-transform" />
               </button>
             </div>
           </div>
@@ -570,37 +683,125 @@ export default function CompanyProfile() {
       </div>
 
       {/* Main Content */}
-      <div className="flex">
+      <div className="flex relative">
         {/* Left Sidebar */}
-        <div className="w-80 bg-white border-r border-gray-200 p-6 overflow-y-auto max-h-screen">
+        <div className={`w-80 backdrop-blur-sm border-r p-4 md:p-6 overflow-y-auto max-h-screen shadow-xl transition-all duration-300 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-rounded-full ${
+          isDarkMode 
+            ? 'bg-slate-800/90 border-slate-700/60 scrollbar-thumb-slate-600 hover:scrollbar-thumb-slate-500' 
+            : 'bg-white/90 border-gray-200/60 scrollbar-thumb-gray-300 hover:scrollbar-thumb-gray-400'
+        } ${
+          isLeftSidebarOpen 
+            ? 'fixed inset-y-0 left-0 z-50 md:relative md:translate-x-0' 
+            : 'hidden md:block'
+        }`}>
+          {/* Mobile close button */}
+          <div className="md:hidden flex justify-end mb-4">
+            <button 
+              onClick={toggleLeftSidebar}
+              className={`p-2 rounded-lg transition-colors ${
+                isDarkMode ? 'text-slate-400 hover:text-slate-200' : 'text-gray-400 hover:text-gray-600'
+              }`}
+            >
+              <X size={20} />
+            </button>
+          </div>
           {/* Contacts Section */}
-          <div className="mb-8">
+          <div className="mb-6 md:mb-8">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+              <h3 className={`text-xs font-bold uppercase tracking-wider flex items-center transition-colors duration-300 ${
+                isDarkMode ? 'text-slate-400' : 'text-gray-600'
+              }`}>
+                <Users size={14} className={`mr-2 ${isDarkMode ? 'text-slate-400' : 'text-blue-500'}`} />
                 CONTACTS
               </h3>
-              <div className="flex items-center space-x-2">
-                <span className="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs">MS</span>
-                <button className="text-blue-600 hover:text-blue-700">
-                  <UserPlus size={16} />
+              <div className="flex items-center space-x-1 md:space-x-2">
+                <span className={`px-2 md:px-3 py-1 md:py-1.5 rounded-full text-xs font-medium shadow-sm transition-colors duration-300 ${
+                  isDarkMode 
+                    ? 'bg-gradient-to-r from-slate-700 to-slate-600 text-slate-300' 
+                    : 'bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700'
+                }`}>MS</span>
+                <button className={`p-1.5 md:p-2 rounded-lg transition-all duration-200 ${
+                  isDarkMode 
+                    ? 'text-blue-400 hover:text-blue-300 hover:bg-slate-700' 
+                    : 'text-blue-600 hover:text-blue-700 hover:bg-blue-50'
+                }`}>
+                  <UserPlus size={14} />
                 </button>
-                <button className="text-blue-600 hover:text-blue-700 text-xs">
+                <button className={`px-2 md:px-3 py-1 md:py-1.5 rounded-lg text-xs font-medium transition-all duration-200 hidden sm:inline-block ${
+                  isDarkMode 
+                    ? 'text-blue-400 hover:text-blue-300 hover:bg-slate-700' 
+                    : 'text-blue-600 hover:text-blue-700 hover:bg-blue-50'
+                }`}>
                   View All Contacts
                 </button>
               </div>
             </div>
 
             {/* Contact List */}
-            <div className="mb-6 space-y-3">
+            <div className="mb-4 md:mb-6 space-y-3 md:space-y-4">
               {data.contacts.slice(0, 3).map(contact => (
-                <div key={contact.id} className="flex items-center justify-between">
-                  <div>
-                    <p className="font-medium text-gray-900 text-sm">{contact.name}</p>
-                    <p className="text-gray-500 text-xs">{contact.role}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-blue-600 text-xs hover:underline cursor-pointer">{contact.email}</p>
-                    <p className="text-gray-500 text-xs">{contact.phone}</p>
+                <div key={contact.id} className={`p-4 md:p-5 rounded-2xl border transition-all duration-300 group cursor-pointer transform hover:scale-105 hover:-translate-y-1 hover:shadow-2xl ${
+                  isDarkMode 
+                    ? 'bg-slate-800 border-slate-600 hover:border-blue-400 hover:shadow-blue-500/30 hover:bg-slate-750' 
+                    : 'bg-white border-gray-200 hover:border-blue-300 hover:shadow-blue-200/60 hover:bg-blue-50/30'
+                }`}>
+                  <div className="flex items-start space-x-3">
+                    {/* Avatar */}
+                    <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-sm transition-all duration-300 group-hover:scale-110 shadow-lg flex-shrink-0 ${
+                      isDarkMode 
+                        ? 'bg-gradient-to-br from-blue-500 to-blue-600 group-hover:from-blue-400 group-hover:to-blue-500 group-hover:shadow-blue-400/50' 
+                        : 'bg-gradient-to-br from-blue-500 to-indigo-600 group-hover:from-blue-400 group-hover:to-indigo-500 group-hover:shadow-blue-500/60'
+                    }`}>
+                      {contact.name.split(' ').map(n => n[0]).join('').substring(0, 2)}
+                    </div>
+                    
+                    {/* Contact Information */}
+                    <div className="flex-1">
+                      {/* Name */}
+                      <h4 className={`text-lg font-bold mb-1 transition-all duration-300 ${
+                        isDarkMode 
+                          ? 'text-white group-hover:text-blue-200' 
+                          : 'text-gray-900 group-hover:text-blue-900'
+                      }`}>{contact.name}</h4>
+                      
+                      {/* Role */}
+                      <p className={`text-sm font-semibold mb-3 transition-colors duration-300 ${
+                        isDarkMode 
+                          ? 'text-slate-300 group-hover:text-slate-200' 
+                          : 'text-gray-700 group-hover:text-gray-800'
+                      }`}>{contact.role}</p>
+                      
+                      {/* Contact Details */}
+                      <div className="space-y-2">
+                        {/* Email */}
+                        <div className="flex items-center space-x-2">
+                          <Mail size={14} className={`flex-shrink-0 transition-colors duration-300 ${
+                            isDarkMode 
+                              ? 'text-blue-400 group-hover:text-blue-300' 
+                              : 'text-blue-600 group-hover:text-blue-700'
+                          }`} />
+                          <p className={`text-sm font-medium hover:underline cursor-pointer transition-all duration-300 break-all ${
+                            isDarkMode 
+                              ? 'text-blue-300 hover:text-white group-hover:text-blue-200' 
+                              : 'text-blue-700 hover:text-blue-900 group-hover:text-blue-800'
+                          }`}>{contact.email}</p>
+                        </div>
+                        
+                        {/* Phone */}
+                        <div className="flex items-center space-x-2">
+                          <Phone size={14} className={`flex-shrink-0 transition-colors duration-300 ${
+                            isDarkMode 
+                              ? 'text-green-400 group-hover:text-green-300' 
+                              : 'text-green-600 group-hover:text-green-700'
+                          }`} />
+                          <p className={`text-sm font-medium transition-colors duration-300 ${
+                            isDarkMode 
+                              ? 'text-slate-200 group-hover:text-white' 
+                              : 'text-gray-800 group-hover:text-gray-900'
+                          }`}>{contact.phone}</p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -608,64 +809,109 @@ export default function CompanyProfile() {
           </div>
 
           {/* Company Details */}
-          <div className="space-y-4">
-            <div>
-              <h4 className="font-medium text-gray-900 mb-2">About Company</h4>
-              <p className="text-gray-600 text-sm">{data.company.aboutCompany}</p>
+          <div className="space-y-6">
+            <div className={`p-4 rounded-xl border shadow-sm transition-colors duration-300 ${
+              isDarkMode 
+                ? 'bg-gradient-to-r from-slate-800 to-slate-700 border-slate-600' 
+                : 'bg-gradient-to-r from-white to-blue-50 border-blue-100'
+            }`}>
+              <h4 className={`font-semibold mb-3 flex items-center transition-colors duration-300 ${
+                isDarkMode ? 'text-slate-200' : 'text-gray-900'
+              }`}>
+                <div className={`p-1 rounded-md mr-2 transition-colors duration-300 ${
+                  isDarkMode ? 'bg-slate-600' : 'bg-blue-100'
+                }`}>
+                  <Building2 size={14} className={isDarkMode ? 'text-slate-300' : 'text-blue-600'} />
+                </div>
+                About Company
+              </h4>
+              <p className={`text-sm leading-relaxed transition-colors duration-300 ${
+                isDarkMode ? 'text-slate-300' : 'text-gray-600'
+              }`}>{data.company.aboutCompany}</p>
             </div>
 
             {/* Detail Fields */}
-            {[
-              { label: 'Website', value: data.company.website, isLink: true },
-              { label: 'Company Industry', value: data.company.industry },
-              { label: 'Company State', value: data.company.state },
-              { label: 'Company Postal Code', value: data.company.postalCode },
-              { label: 'Monster Board Company', value: data.company.monsterBoard },
-              { label: 'Company Full Address', value: data.company.address },
-              { label: 'Company Locality', value: data.company.locality },
-              { label: 'Company Country', value: data.company.country },
-              { label: 'LinkedIn Company ID', value: data.company.linkedinId },
-              { label: 'Indeed Opted Out', value: data.company.indeedOptedOut }
-            ].map((field, index) => (
-              <div key={index} className="flex justify-between items-start text-sm py-1">
-                <span className="text-gray-700 font-medium">{field.label}</span>
-                <span className={`text-right max-w-48 ${
-                  field.isLink ? 'text-blue-600' : 'text-gray-900'
-                }`}>
-                  {field.isLink ? (
-                    <a href={`https://${field.value}`} className="hover:underline">
-                      {field.value}
-                    </a>
-                  ) : field.value}
-                </span>
-              </div>
-            ))}
+            <div className={`space-y-3 p-4 rounded-xl border shadow-sm transition-colors duration-300 ${
+              isDarkMode 
+                ? 'bg-gradient-to-r from-slate-800 to-slate-700 border-slate-600' 
+                : 'bg-gradient-to-r from-white to-gray-50 border-gray-100'
+            }`}>
+              <h4 className={`font-semibold mb-3 text-sm transition-colors duration-300 ${
+                isDarkMode ? 'text-slate-200' : 'text-gray-900'
+              }`}>Company Details</h4>
+              {[
+                { label: 'Website', value: data.company.website, isLink: true },
+                { label: 'Industry', value: data.company.industry },
+                { label: 'State', value: data.company.state },
+                { label: 'Postal Code', value: data.company.postalCode },
+                { label: 'Monster Board', value: data.company.monsterBoard },
+                { label: 'Full Address', value: data.company.address },
+                { label: 'Locality', value: data.company.locality },
+                { label: 'Country', value: data.company.country },
+                { label: 'LinkedIn ID', value: data.company.linkedinId },
+                { label: 'Indeed Opted Out', value: data.company.indeedOptedOut }
+              ].map((field, index) => (
+                <div key={index} className="flex justify-between items-start text-sm py-2 border-b border-opacity-20 last:border-b-0 border-gray-400">
+                  <span className={`font-medium transition-colors duration-300 ${
+                    isDarkMode ? 'text-slate-300' : 'text-gray-700'
+                  }`}>{field.label}</span>
+                  <span className={`text-right max-w-48 transition-colors duration-300 ${
+                    field.isLink 
+                      ? isDarkMode ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-700'
+                      : isDarkMode ? 'text-slate-200' : 'text-gray-900'
+                  }`}>
+                    {field.isLink ? (
+                      <a href={`https://${field.value}`} className="hover:underline">
+                        {field.value}
+                      </a>
+                    ) : field.value}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
         {/* Center Content */}
-        <div className="flex-1 bg-white">
+        <div className={`flex-1 shadow-lg transition-colors duration-300 min-w-0 ${
+          isDarkMode ? 'bg-slate-800/60' : 'bg-white/60'
+        } backdrop-blur-sm`}>
           {/* Content Tabs */}
-          <div className="border-b border-gray-200 px-6">
-            <div className="flex space-x-8">
+          <div className={`border-b px-4 md:px-6 backdrop-blur-sm transition-colors duration-300 overflow-x-auto ${
+            isDarkMode 
+              ? 'border-slate-700/70 bg-slate-800/80' 
+              : 'border-gray-200/70 bg-white/80'
+          }`}>
+            <div className="flex space-x-4 md:space-x-8 min-w-max">
               {[
                 { key: 'jobs', label: 'Jobs' },
                 { key: 'hotlists', label: 'Hotlists' },
-                { key: 'deals', label: 'Related Deals' },
-                { key: 'emails', label: 'Related Emails' },
-                { key: 'pitched', label: 'Candidate(s) Pitched' },
-                { key: 'employed', label: 'Candidates Employed' }
+                { key: 'deals', label: 'Deals' },
+                { key: 'emails', label: 'Emails' },
+                { key: 'pitched', label: 'Pitched' },
+                { key: 'employed', label: 'Employed' }
               ].map(tab => (
                 <button
                   key={tab.key}
                   onClick={() => setActiveTab(tab.key)}
-                  className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                  className={`py-3 md:py-4 px-1 border-b-3 font-semibold text-sm whitespace-nowrap transition-all duration-200 ${
                     activeTab === tab.key
-                      ? 'border-blue-500 text-blue-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700'
+                      ? isDarkMode 
+                        ? 'border-blue-400 text-blue-400 bg-blue-400/10' 
+                        : 'border-blue-500 text-blue-600 bg-blue-50/50'
+                      : isDarkMode 
+                        ? 'border-transparent text-slate-400 hover:text-slate-200 hover:border-slate-500' 
+                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                   }`}
                 >
-                  {tab.label}
+                  <span className="hidden lg:inline">{
+                    tab.key === 'deals' ? 'Related Deals' :
+                    tab.key === 'emails' ? 'Related Emails' :
+                    tab.key === 'pitched' ? 'Candidate(s) Pitched' :
+                    tab.key === 'employed' ? 'Candidates Employed' :
+                    tab.label
+                  }</span>
+                  <span className="lg:hidden">{tab.label}</span>
                 </button>
               ))}
             </div>
@@ -673,36 +919,56 @@ export default function CompanyProfile() {
 
           {/* Jobs Content */}
           {activeTab === 'jobs' && (
-            <div className="p-6">
+            <div className="p-4 md:p-6">
               {/* Toolbar */}
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center space-x-4">
-                  <button className="flex items-center space-x-2 px-3 py-2 border border-gray-300 rounded-md text-sm hover:bg-gray-50">
-                    <Filter size={16} />
-                    <span>Filter Jobs</span>
-                    <span className="bg-gray-100 px-2 py-1 rounded-full text-xs">4</span>
-                    <ChevronDown size={16} />
+              <div className={`flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6 p-3 md:p-4 rounded-xl border transition-colors duration-300 ${
+                isDarkMode 
+                  ? 'bg-gradient-to-r from-slate-800 to-slate-700 border-slate-600' 
+                  : 'bg-gradient-to-r from-white to-gray-50 border-gray-200'
+              }`}>
+                <div className="flex flex-wrap items-center gap-2 md:gap-4">
+                  <button className={`flex items-center space-x-2 px-3 md:px-4 py-2 md:py-2.5 border rounded-lg md:rounded-xl text-sm transition-all duration-200 shadow-sm ${
+                    isDarkMode 
+                      ? 'border-slate-600 text-slate-200 hover:bg-slate-700 hover:border-slate-500' 
+                      : 'border-gray-300 hover:bg-gray-50 hover:border-gray-400'
+                  }`}>
+                    <Filter size={16} className={isDarkMode ? 'text-blue-400' : 'text-blue-600'} />
+                    <span className="font-medium hidden sm:inline">Filter Jobs</span>
+                    <span className="font-medium sm:hidden">Filter</span>
+                    <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                      isDarkMode 
+                        ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white' 
+                        : 'bg-gradient-to-r from-blue-100 to-blue-200 text-blue-700'
+                    }`}>4</span>
+                    <ChevronDown size={16} className="hidden sm:inline" />
                   </button>
-                  <button className="px-4 py-2 border border-gray-300 rounded-md text-sm hover:bg-gray-50">
+                  <button className={`px-3 md:px-4 py-2 md:py-2.5 border rounded-lg md:rounded-xl text-sm font-medium transition-all duration-200 shadow-sm hidden md:block ${
+                    isDarkMode 
+                      ? 'border-slate-600 text-slate-200 hover:bg-slate-700 hover:border-slate-500' 
+                      : 'border-gray-300 hover:bg-gray-50 hover:border-gray-400'
+                  }`}>
                     View All Jobs
                   </button>
                 </div>
-                <div className="flex items-center space-x-3">
+                <div className="flex flex-wrap items-center gap-2 md:gap-3">
                   <button 
                     onClick={() => setShowViewAssigned(!showViewAssigned)}
-                    className={`flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium ${
+                    className={`flex items-center space-x-2 px-3 md:px-4 py-2 md:py-2.5 rounded-lg md:rounded-xl text-sm font-medium transition-all duration-200 shadow-sm ${
                       showViewAssigned 
-                        ? 'bg-blue-600 text-white' 
-                        : 'border border-gray-300 text-gray-700 hover:bg-gray-50'
+                        ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg' 
+                        : isDarkMode 
+                          ? 'border border-slate-600 text-slate-300 hover:bg-slate-700 hover:border-slate-500'
+                          : 'border border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400'
                     }`}
                   >
                     <Eye size={16} />
-                    <span>View Assigned Candidates</span>
+                    <span className="hidden lg:inline">View Assigned Candidates</span>
+                    <span className="lg:hidden">Assigned</span>
                     <span className="bg-blue-500 text-white px-2 py-1 rounded-full text-xs">0</span>
                   </button>
                   <button 
                     onClick={() => setShowAddJobModal(true)}
-                    className="flex items-center space-x-2 bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-green-700"
+                    className="flex items-center space-x-2 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white px-3 md:px-4 py-2 md:py-2.5 rounded-lg md:rounded-xl text-sm font-medium hover:from-emerald-700 hover:to-emerald-800 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
                   >
                     <Plus size={16} />
                     <span>Add Job</span>
@@ -711,36 +977,50 @@ export default function CompanyProfile() {
               </div>
 
               {/* Job Cards */}
-              <div className="space-y-3">
+              <div className="space-y-3 md:space-y-4">
                 {data.jobs.map(job => (
-                  <div key={job.id} className="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm hover:shadow-md transition-shadow">
+                  <div key={job.id} className={`border rounded-xl md:rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group border-l-4 border-l-blue-500 ${
+                    isDarkMode 
+                      ? 'border-slate-600/60 bg-gradient-to-r from-slate-800 via-slate-800 to-slate-700/50' 
+                      : 'border-gray-200/60 bg-gradient-to-r from-white via-white to-blue-50/30'
+                  }`}>
                     {/* Job Header */}
-                    <div className="p-4">
-                      <div className="flex items-start justify-between mb-3">
-                        <div className="flex items-start space-x-3 flex-1">
-                          <div className="p-2 bg-blue-50 rounded-md">
-                            <Briefcase className="text-blue-600" size={16} />
+                    <div className="p-4 md:p-5">
+                      <div className="flex items-start justify-between mb-3 md:mb-4">
+                        <div className="flex items-start space-x-3 md:space-x-4 flex-1 min-w-0">
+                          <div className={`p-2 md:p-3 rounded-lg md:rounded-xl shadow-md group-hover:shadow-lg transition-all duration-300 ${
+                            isDarkMode 
+                              ? 'bg-gradient-to-br from-slate-600 to-slate-700' 
+                              : 'bg-gradient-to-br from-blue-500 to-indigo-600'
+                          }`}>
+                            <Briefcase className="text-white" size={16} />
                           </div>
                           <div className="flex-1">
                             <div className="flex items-center space-x-2 mb-1">
-                              <h3 className="text-base font-semibold text-gray-900">{job.title}</h3>
+                              <h3 className={`text-base font-semibold ${isDarkMode ? 'text-slate-200' : 'text-gray-900'}`}>{job.title}</h3>
                               <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                                job.status === 'Open' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'
+                                job.status === 'Open' 
+                                  ? isDarkMode 
+                                    ? 'bg-green-800/70 text-green-200 border border-green-600/50' 
+                                    : 'bg-green-100 text-green-800' 
+                                  : isDarkMode 
+                                    ? 'bg-slate-700 text-slate-300 border border-slate-600' 
+                                    : 'bg-gray-100 text-gray-600'
                               }`}>
                                 {job.status}
                               </span>
                             </div>
-                            <div className="flex items-center space-x-3 text-xs text-gray-600">
+                            <div className={`flex items-center space-x-3 text-xs ${isDarkMode ? 'text-slate-400' : 'text-gray-600'}`}>
                               <div className="flex items-center space-x-1">
                                 <MapPin size={12} />
                                 <span>{job.location}</span>
                               </div>
-                              <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
+                              <div className={`w-1 h-1 rounded-full ${isDarkMode ? 'bg-slate-600' : 'bg-gray-300'}`}></div>
                               <div className="flex items-center space-x-1">
                                 <Users size={12} />
                                 <span>{job.contact}</span>
                               </div>
-                              <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
+                              <div className={`w-1 h-1 rounded-full ${isDarkMode ? 'bg-slate-600' : 'bg-gray-300'}`}></div>
                               <div>{job.owner}</div>
                             </div>
                           </div>
@@ -748,7 +1028,11 @@ export default function CompanyProfile() {
                         <div className="flex items-center space-x-1">
                           <button 
                             onClick={() => deleteJob(job.id)}
-                            className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                            className={`p-1.5 rounded transition-colors ${
+                              isDarkMode 
+                                ? 'text-slate-400 hover:text-red-400 hover:bg-red-900/20' 
+                                : 'text-gray-400 hover:text-red-600 hover:bg-red-50'
+                            }`}
                           >
                             <Trash2 size={14} />
                           </button>
@@ -757,39 +1041,59 @@ export default function CompanyProfile() {
                       
                       {/* Job Metrics */}
                       <div className="grid grid-cols-3 gap-3 mt-3">
-                        <div className="text-center p-2.5 bg-gray-50 rounded-md">
-                          <div className="text-lg font-bold text-blue-600">{job.pipeline}</div>
-                          <div className="text-xs text-gray-600">In Pipeline</div>
+                        <div className={`text-center p-2.5 rounded-md ${isDarkMode ? 'bg-slate-700/60' : 'bg-gray-50'}`}>
+                          <div className={`text-lg font-bold ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>{job.pipeline}</div>
+                          <div className={`text-xs ${isDarkMode ? 'text-slate-400' : 'text-gray-600'}`}>In Pipeline</div>
                         </div>
-                        <div className="text-center p-2.5 bg-gray-50 rounded-md">
-                          <div className="text-lg font-bold text-green-600">{job.placed}</div>
-                          <div className="text-xs text-gray-600">Placed</div>
+                        <div className={`text-center p-2.5 rounded-md ${isDarkMode ? 'bg-slate-700/60' : 'bg-gray-50'}`}>
+                          <div className={`text-lg font-bold ${isDarkMode ? 'text-green-400' : 'text-green-600'}`}>{job.placed}</div>
+                          <div className={`text-xs ${isDarkMode ? 'text-slate-400' : 'text-gray-600'}`}>Placed</div>
                         </div>
-                        <div className="text-center p-2.5 bg-gray-50 rounded-md">
-                          <div className="text-lg font-bold text-purple-600">{job.pipeline + job.placed}</div>
-                          <div className="text-xs text-gray-600">Total</div>
+                        <div className={`text-center p-2.5 rounded-md ${isDarkMode ? 'bg-slate-700/60' : 'bg-gray-50'}`}>
+                          <div className={`text-lg font-bold ${isDarkMode ? 'text-purple-400' : 'text-purple-600'}`}>{job.pipeline + job.placed}</div>
+                          <div className={`text-xs ${isDarkMode ? 'text-slate-400' : 'text-gray-600'}`}>Total</div>
                         </div>
                       </div>
                     </div>
                     
                     {/* Action Bar */}
-                    <div className="bg-gray-50 px-4 py-2.5 border-t border-gray-100">
+                    <div className={`px-4 py-2.5 border-t ${
+                      isDarkMode 
+                        ? 'bg-slate-800/60 border-slate-700/60' 
+                        : 'bg-gray-50 border-gray-100'
+                    }`}>
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-2">
-                          <button className="flex items-center space-x-1.5 px-3 py-1.5 bg-blue-600 text-white rounded text-xs font-medium hover:bg-blue-700 transition-colors">
+                          <button className={`flex items-center space-x-1.5 px-3 py-1.5 rounded text-xs font-medium transition-colors ${
+                            isDarkMode 
+                              ? 'bg-blue-600 text-white hover:bg-blue-700' 
+                              : 'bg-blue-600 text-white hover:bg-blue-700'
+                          }`}>
                             <Users size={12} />
                             <span>View Candidates</span>
                           </button>
-                          <button className="flex items-center space-x-1.5 px-3 py-1.5 border border-gray-300 text-gray-700 rounded text-xs font-medium hover:bg-gray-50 transition-colors">
+                          <button className={`flex items-center space-x-1.5 px-3 py-1.5 border rounded text-xs font-medium transition-colors ${
+                            isDarkMode 
+                              ? 'border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-slate-200' 
+                              : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                          }`}>
                             <Plus size={12} />
                             <span>Add Candidate</span>
                           </button>
                         </div>
                         <div className="flex items-center space-x-1">
-                          <button className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-200 rounded transition-colors">
+                          <button className={`p-1.5 rounded transition-colors ${
+                            isDarkMode 
+                              ? 'text-slate-400 hover:text-slate-200 hover:bg-slate-700' 
+                              : 'text-gray-400 hover:text-gray-600 hover:bg-gray-200'
+                          }`}>
                             <Edit size={14} />
                           </button>
-                          <button className="p-1.5 text-gray-400 hover:text-yellow-500 hover:bg-gray-200 rounded transition-colors">
+                          <button className={`p-1.5 rounded transition-colors ${
+                            isDarkMode 
+                              ? 'text-slate-400 hover:text-yellow-400 hover:bg-slate-700' 
+                              : 'text-gray-400 hover:text-yellow-500 hover:bg-gray-200'
+                          }`}>
                             <Star size={14} />
                           </button>
                         </div>
@@ -801,7 +1105,7 @@ export default function CompanyProfile() {
 
               {/* Footer */}
               <div className="text-center py-8">
-                <p className="text-gray-500">That's all the jobs 😊</p>
+                <p className={isDarkMode ? 'text-slate-400' : 'text-gray-500'}>That's all the jobs 😊</p>
               </div>
             </div>
           )}
@@ -811,19 +1115,29 @@ export default function CompanyProfile() {
             <div className="p-6">
               <div className="space-y-4">
                 {data.hotlists.map(hotlist => (
-                  <div key={hotlist.id} className="border border-gray-200 rounded-lg p-4 bg-white">
+                  <div key={hotlist.id} className={`border rounded-lg p-4 transition-all duration-200 hover:shadow-md ${
+                    isDarkMode 
+                      ? 'border-slate-600/60 bg-gradient-to-r from-slate-800/80 to-slate-700/50 hover:border-slate-500/60' 
+                      : 'border-gray-200 bg-white hover:border-gray-300'
+                  }`}>
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <h3 className="font-semibold text-gray-900 mb-2">{hotlist.name}</h3>
-                        <p className="text-gray-600 text-sm mb-3">{hotlist.description}</p>
-                        <div className="flex items-center space-x-4 text-sm text-gray-500">
+                        <h3 className={`font-semibold mb-2 ${isDarkMode ? 'text-slate-200' : 'text-gray-900'}`}>{hotlist.name}</h3>
+                        <p className={`text-sm mb-3 ${isDarkMode ? 'text-slate-400' : 'text-gray-600'}`}>{hotlist.description}</p>
+                        <div className={`flex items-center space-x-4 text-sm ${isDarkMode ? 'text-slate-500' : 'text-gray-500'}`}>
                           <span>{hotlist.candidateCount} candidates</span>
                           <span>Created by {hotlist.createdBy}</span>
                           <span>{formatDate(hotlist.createdDate)}</span>
                         </div>
                       </div>
                       <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                        hotlist.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'
+                        hotlist.status === 'Active' 
+                          ? isDarkMode 
+                            ? 'bg-green-800/70 text-green-200 border border-green-600/50' 
+                            : 'bg-green-100 text-green-800'
+                          : isDarkMode 
+                            ? 'bg-slate-700 text-slate-300 border border-slate-600' 
+                            : 'bg-gray-100 text-gray-600'
                       }`}>
                         {hotlist.status}
                       </span>
@@ -839,26 +1153,38 @@ export default function CompanyProfile() {
             <div className="p-6">
               <div className="space-y-4">
                 {data.relatedDeals.map(deal => (
-                  <div key={deal.id} className="border border-gray-200 rounded-lg p-4 bg-white">
+                  <div key={deal.id} className={`border rounded-lg p-4 transition-all duration-200 hover:shadow-md ${
+                    isDarkMode 
+                      ? 'border-slate-600/60 bg-gradient-to-r from-slate-800/80 to-slate-700/50 hover:border-slate-500/60' 
+                      : 'border-gray-200 bg-white hover:border-gray-300'
+                  }`}>
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex-1">
-                        <h3 className="font-semibold text-gray-900">{deal.title}</h3>
-                        <p className="text-gray-600 text-sm mt-1">{deal.description}</p>
+                        <h3 className={`font-semibold ${isDarkMode ? 'text-slate-200' : 'text-gray-900'}`}>{deal.title}</h3>
+                        <p className={`text-sm mt-1 ${isDarkMode ? 'text-slate-400' : 'text-gray-600'}`}>{deal.description}</p>
                       </div>
                       <div className="text-right">
-                        <div className="text-lg font-bold text-green-600">{deal.value}</div>
-                        <div className="text-sm text-gray-500">{deal.probability}</div>
+                        <div className={`text-lg font-bold ${isDarkMode ? 'text-green-400' : 'text-green-600'}`}>{deal.value}</div>
+                        <div className={`text-sm ${isDarkMode ? 'text-slate-500' : 'text-gray-500'}`}>{deal.probability}</div>
                       </div>
                     </div>
                     <div className="flex items-center justify-between text-sm">
                       <span className={`px-3 py-1 rounded-full font-medium ${
-                        deal.stage === 'Closed Won' ? 'bg-green-100 text-green-800' :
-                        deal.stage === 'Negotiation' ? 'bg-blue-100 text-blue-800' :
-                        'bg-yellow-100 text-yellow-800'
+                        deal.stage === 'Closed Won' 
+                          ? isDarkMode 
+                            ? 'bg-green-800/70 text-green-200 border border-green-600/50' 
+                            : 'bg-green-100 text-green-800'
+                          : deal.stage === 'Negotiation' 
+                            ? isDarkMode 
+                              ? 'bg-blue-800/70 text-blue-200 border border-blue-600/50' 
+                              : 'bg-blue-100 text-blue-800'
+                            : isDarkMode 
+                              ? 'bg-yellow-800/70 text-yellow-200 border border-yellow-600/50' 
+                              : 'bg-yellow-100 text-yellow-800'
                       }`}>
                         {deal.stage}
                       </span>
-                      <div className="text-gray-500">
+                      <div className={isDarkMode ? 'text-slate-500' : 'text-gray-500'}>
                         <span>Owner: {deal.owner}</span>
                         <span className="ml-4">Close: {formatDate(deal.expectedCloseDate)}</span>
                       </div>
@@ -874,22 +1200,32 @@ export default function CompanyProfile() {
             <div className="p-6">
               <div className="space-y-3">
                 {data.relatedEmails.map(email => (
-                  <div key={email.id} className="border border-gray-200 rounded-lg p-4 bg-white">
+                  <div key={email.id} className={`border rounded-lg p-4 transition-all duration-200 hover:shadow-md ${
+                    isDarkMode 
+                      ? 'border-slate-600/60 bg-gradient-to-r from-slate-800/80 to-slate-700/50 hover:border-slate-500/60' 
+                      : 'border-gray-200 bg-white hover:border-gray-300'
+                  }`}>
                     <div className="flex items-start space-x-3">
                       <div className={`w-3 h-3 rounded-full mt-2 ${
-                        email.status === 'Unread' ? 'bg-blue-500' : 'bg-gray-300'
+                        email.status === 'Unread' 
+                          ? isDarkMode 
+                            ? 'bg-blue-400' 
+                            : 'bg-blue-500'
+                          : isDarkMode 
+                            ? 'bg-slate-600' 
+                            : 'bg-gray-300'
                       }`}></div>
                       <div className="flex-1">
                         <div className="flex items-start justify-between">
-                          <h4 className="font-medium text-gray-900 text-sm">{email.subject}</h4>
-                          <span className="text-xs text-gray-500">{formatDate(email.date)}</span>
+                          <h4 className={`font-medium text-sm ${isDarkMode ? 'text-slate-200' : 'text-gray-900'}`}>{email.subject}</h4>
+                          <span className={`text-xs ${isDarkMode ? 'text-slate-500' : 'text-gray-500'}`}>{formatDate(email.date)}</span>
                         </div>
-                        <div className="text-xs text-gray-500 mt-1">
+                        <div className={`text-xs mt-1 ${isDarkMode ? 'text-slate-500' : 'text-gray-500'}`}>
                           <span>From: {email.from}</span>
                           <span className="mx-2">•</span>
                           <span>To: {email.to}</span>
                         </div>
-                        <p className="text-sm text-gray-600 mt-2">{email.preview}</p>
+                        <p className={`text-sm mt-2 ${isDarkMode ? 'text-slate-400' : 'text-gray-600'}`}>{email.preview}</p>
                       </div>
                     </div>
                   </div>
@@ -903,33 +1239,48 @@ export default function CompanyProfile() {
             <div className="p-6">
               <div className="space-y-4">
                 {data.candidatesPitched.map(candidate => (
-                  <div key={candidate.id} className="border border-gray-200 rounded-lg p-4 bg-white">
+                  <div key={candidate.id} className={`border rounded-lg p-4 transition-all duration-200 hover:shadow-md ${
+                    isDarkMode 
+                      ? 'border-slate-600/60 bg-gradient-to-r from-slate-800/80 to-slate-700/50 hover:border-slate-500/60' 
+                      : 'border-gray-200 bg-white hover:border-gray-300'
+                  }`}>
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex-1">
-                        <h3 className="font-semibold text-gray-900">{candidate.name}</h3>
-                        <p className="text-sm text-gray-600">{candidate.position}</p>
-                        <div className="flex items-center space-x-4 text-xs text-gray-500 mt-2">
+                        <h3 className={`font-semibold ${isDarkMode ? 'text-slate-200' : 'text-gray-900'}`}>{candidate.name}</h3>
+                        <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-gray-600'}`}>{candidate.position}</p>
+                        <div className={`flex items-center space-x-4 text-xs mt-2 ${isDarkMode ? 'text-slate-500' : 'text-gray-500'}`}>
                           <span>{candidate.experience} experience</span>
                           <span>{candidate.currentCompany}</span>
                           <span>{candidate.location}</span>
                         </div>
                       </div>
                       <div className="text-right">
-                        <div className="font-semibold text-gray-900">{candidate.salary}</div>
+                        <div className={`font-semibold ${isDarkMode ? 'text-slate-200' : 'text-gray-900'}`}>{candidate.salary}</div>
                         <span className={`px-2 py-1 rounded-full text-xs font-medium mt-1 inline-block ${
-                          candidate.status === 'Interview Scheduled' ? 'bg-blue-100 text-blue-800' :
-                          candidate.status === 'Offer Extended' ? 'bg-green-100 text-green-800' :
-                          candidate.status === 'Client Review' ? 'bg-yellow-100 text-yellow-800' :
-                          'bg-red-100 text-red-800'
+                          candidate.status === 'Interview Scheduled' 
+                            ? isDarkMode 
+                              ? 'bg-blue-800/70 text-blue-200 border border-blue-600/50' 
+                              : 'bg-blue-100 text-blue-800'
+                            : candidate.status === 'Offer Extended' 
+                              ? isDarkMode 
+                                ? 'bg-green-800/70 text-green-200 border border-green-600/50' 
+                                : 'bg-green-100 text-green-800'
+                              : candidate.status === 'Client Review' 
+                                ? isDarkMode 
+                                  ? 'bg-yellow-800/70 text-yellow-200 border border-yellow-600/50' 
+                                  : 'bg-yellow-100 text-yellow-800'
+                                : isDarkMode 
+                                  ? 'bg-red-800/70 text-red-200 border border-red-600/50' 
+                                  : 'bg-red-100 text-red-800'
                         }`}>
                           {candidate.status}
                         </span>
                       </div>
                     </div>
-                    <div className="text-sm text-gray-600">
+                    <div className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-gray-600'}`}>
                       <span className="font-medium">Pitched:</span> {formatDate(candidate.pitchDate)}
                     </div>
-                    <p className="text-sm text-gray-600 mt-2">{candidate.notes}</p>
+                    <p className={`text-sm mt-2 ${isDarkMode ? 'text-slate-400' : 'text-gray-600'}`}>{candidate.notes}</p>
                   </div>
                 ))}
               </div>
@@ -941,33 +1292,45 @@ export default function CompanyProfile() {
             <div className="p-6">
               <div className="space-y-4">
                 {data.candidatesEmployed.map(candidate => (
-                  <div key={candidate.id} className="border border-gray-200 rounded-lg p-4 bg-white">
+                  <div key={candidate.id} className={`border rounded-lg p-4 transition-all duration-200 hover:shadow-md ${
+                    isDarkMode 
+                      ? 'border-slate-600/60 bg-gradient-to-r from-slate-800/80 to-slate-700/50 hover:border-slate-500/60' 
+                      : 'border-gray-200 bg-white hover:border-gray-300'
+                  }`}>
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex-1">
-                        <h3 className="font-semibold text-gray-900">{candidate.name}</h3>
-                        <p className="text-sm text-gray-600">{candidate.position}</p>
-                        <div className="flex items-center space-x-4 text-xs text-gray-500 mt-2">
+                        <h3 className={`font-semibold ${isDarkMode ? 'text-slate-200' : 'text-gray-900'}`}>{candidate.name}</h3>
+                        <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-gray-600'}`}>{candidate.position}</p>
+                        <div className={`flex items-center space-x-4 text-xs mt-2 ${isDarkMode ? 'text-slate-500' : 'text-gray-500'}`}>
                           <span>Manager: {candidate.manager}</span>
                           <span>{candidate.location}</span>
                         </div>
                       </div>
                       <div className="text-right">
-                        <div className="font-semibold text-gray-900">{candidate.salary}</div>
-                        <div className="text-xs text-gray-500">Fee: {candidate.placementFee}</div>
+                        <div className={`font-semibold ${isDarkMode ? 'text-slate-200' : 'text-gray-900'}`}>{candidate.salary}</div>
+                        <div className={`text-xs ${isDarkMode ? 'text-slate-500' : 'text-gray-500'}`}>Fee: {candidate.placementFee}</div>
                         <span className={`px-2 py-1 rounded-full text-xs font-medium mt-1 inline-block ${
-                          candidate.status === 'Active' ? 'bg-green-100 text-green-800' :
-                          candidate.status === 'Promoted' ? 'bg-blue-100 text-blue-800' :
-                          'bg-gray-100 text-gray-600'
+                          candidate.status === 'Active' 
+                            ? isDarkMode 
+                              ? 'bg-green-800/70 text-green-200 border border-green-600/50' 
+                              : 'bg-green-100 text-green-800'
+                            : candidate.status === 'Promoted' 
+                              ? isDarkMode 
+                                ? 'bg-blue-800/70 text-blue-200 border border-blue-600/50' 
+                                : 'bg-blue-100 text-blue-800'
+                              : isDarkMode 
+                                ? 'bg-slate-700 text-slate-300 border border-slate-600' 
+                                : 'bg-gray-100 text-gray-600'
                         }`}>
                           {candidate.status}
                         </span>
                       </div>
                     </div>
-                    <div className="grid grid-cols-2 gap-4 text-sm text-gray-600 mb-2">
+                    <div className={`grid grid-cols-2 gap-4 text-sm mb-2 ${isDarkMode ? 'text-slate-400' : 'text-gray-600'}`}>
                       <div><span className="font-medium">Hired:</span> {formatDate(candidate.hireDate)}</div>
                       <div><span className="font-medium">Started:</span> {formatDate(candidate.startDate)}</div>
                     </div>
-                    <p className="text-sm text-gray-600">{candidate.notes}</p>
+                    <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-gray-600'}`}>{candidate.notes}</p>
                   </div>
                 ))}
               </div>
@@ -976,13 +1339,34 @@ export default function CompanyProfile() {
         </div>
 
         {/* Right Panel */}
-        <div className="w-80 bg-gray-50 border-l border-gray-200 p-6">
+        <div className={`w-80 border-l p-4 md:p-6 shadow-xl backdrop-blur-sm transition-all duration-300 overflow-y-auto max-h-screen scrollbar-thin scrollbar-track-transparent scrollbar-thumb-rounded-full ${
+          isDarkMode 
+            ? 'bg-gradient-to-b from-slate-800/95 to-slate-900/95 border-slate-700/60 scrollbar-thumb-slate-600 hover:scrollbar-thumb-slate-500' 
+            : 'bg-gradient-to-b from-gray-50/95 to-white/95 border-gray-200/60 scrollbar-thumb-gray-300 hover:scrollbar-thumb-gray-400'
+        } ${
+          isRightSidebarOpen 
+            ? 'fixed inset-y-0 right-0 z-50 md:relative md:translate-x-0' 
+            : 'hidden md:block'
+        }`}>
+          {/* Mobile close button */}
+          <div className="md:hidden flex justify-between items-center mb-4">
+            <h2 className={`font-semibold ${isDarkMode ? 'text-slate-200' : 'text-gray-900'}`}>Activities</h2>
+            <button 
+              onClick={toggleRightSidebar}
+              className={`p-2 rounded-lg transition-colors ${
+                isDarkMode ? 'text-slate-400 hover:text-slate-200' : 'text-gray-400 hover:text-gray-600'
+              }`}
+            >
+              <X size={20} />
+            </button>
+          </div>
+          
           {/* Activity Tabs */}
-          <div className="mb-6">
-            <div className="flex flex-wrap gap-2">
+          <div className="mb-4 md:mb-6">
+            <div className="flex flex-wrap gap-1 md:gap-2">
               {[
                 { key: 'all', label: 'All', count: counts.all },
-                { key: 'calls', label: 'Notes & Calls', count: counts.calls },
+                { key: 'calls', label: 'Calls', count: counts.calls },
                 { key: 'tasks', label: 'Tasks', count: counts.tasks },
                 { key: 'meetings', label: 'Meetings', count: counts.meetings },
                 { key: 'files', label: 'Files', count: counts.files }
@@ -990,30 +1374,44 @@ export default function CompanyProfile() {
                 <button
                   key={tab.key}
                   onClick={() => setActiveActivityTab(tab.key)}
-                  className={`px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
+                  className={`px-2 md:px-3 py-1.5 md:py-2.5 rounded-lg md:rounded-xl text-xs font-semibold transition-all duration-200 shadow-sm ${
                     activeActivityTab === tab.key 
-                      ? 'bg-blue-600 text-white' 
-                      : 'bg-white text-gray-600 hover:text-gray-800 hover:bg-gray-100 border border-gray-200'
+                      ? isDarkMode 
+                        ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg transform -translate-y-0.5' 
+                        : 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg transform -translate-y-0.5'
+                      : isDarkMode 
+                        ? 'bg-slate-700 text-slate-300 hover:text-slate-100 hover:bg-slate-600 border border-slate-600 hover:border-slate-500' 
+                        : 'bg-white text-gray-600 hover:text-gray-800 hover:bg-gray-100 border border-gray-200 hover:border-gray-300'
                   }`}
                 >
-                  {tab.label} ({tab.count})
+                  <span className="hidden sm:inline">{tab.key === 'calls' ? 'Notes & Calls' : tab.label}</span>
+                  <span className="sm:hidden">{tab.label}</span> ({tab.count})
                 </button>
               ))}
             </div>
           </div>
 
           {/* Quick Actions */}
-          <div className="mb-8">
-            <h3 className="font-medium text-gray-900 mb-4">Quick Actions</h3>
-            <div className="grid grid-cols-2 gap-3">
+          <div className="mb-6 md:mb-8">
+            <h3 className={`font-semibold mb-3 md:mb-4 flex items-center transition-colors duration-300 ${
+              isDarkMode ? 'text-slate-200' : 'text-gray-900'
+            }`}>
+              <div className={`p-1 rounded-md mr-2 transition-colors duration-300 ${
+                isDarkMode ? 'bg-slate-600' : 'bg-blue-100'
+              }`}>
+                <Target size={14} className={isDarkMode ? 'text-slate-300' : 'text-blue-600'} />
+              </div>
+              Quick Actions
+            </h3>
+            <div className="grid grid-cols-2 gap-2">
               {quickActions.map((action, index) => (
                 <button
                   key={index}
                   onClick={action.action}
-                  className={`flex flex-col items-center space-y-2 p-4 rounded-lg text-white transition-colors ${action.color}`}
+                  className={`flex flex-col items-center space-y-1 p-2 md:p-3 rounded-lg md:rounded-xl text-white transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 hover:scale-102 ${action.color}`}
                 >
-                  <action.icon size={24} />
-                  <span className="text-sm font-medium">{action.label}</span>
+                  <action.icon size={16} className="md:w-[18px] md:h-[18px]" />
+                  <span className="text-xs font-medium">{action.label}</span>
                 </button>
               ))}
             </div>
@@ -1022,22 +1420,36 @@ export default function CompanyProfile() {
           {/* Search & Filter */}
           <div className="mb-6">
             <div className="relative mb-3">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
+              <div className={`absolute left-4 top-1/2 transform -translate-y-1/2 transition-colors duration-300 ${
+                isDarkMode ? 'text-slate-400' : 'text-gray-400'
+              }`}>
+                <Search size={16} />
+              </div>
               <input
                 type="text"
                 placeholder="Search in Notes, Call Log, Task, Meeting..."
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={`w-full pl-12 pr-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm transition-all duration-200 hover:shadow-md ${
+                  isDarkMode 
+                    ? 'border-slate-600 bg-slate-700 text-slate-200 placeholder-slate-400' 
+                    : 'border-gray-300 bg-white text-gray-900'
+                }`}
               />
             </div>
-            <button className="flex items-center space-x-2 text-gray-600 hover:text-gray-800">
+            <button className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-200 ${
+              isDarkMode 
+                ? 'text-slate-400 hover:text-blue-400 hover:bg-slate-700' 
+                : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
+            }`}>
               <Filter size={16} />
-              <span className="text-sm">Filter</span>
+              <span className="text-sm font-medium">Filter</span>
             </button>
           </div>
 
           {/* Activities */}
           <div>
-            <h3 className="font-medium text-gray-900 mb-4">
+            <h3 className={`font-medium mb-4 transition-colors duration-300 ${
+              isDarkMode ? 'text-slate-200' : 'text-gray-900'
+            }`}>
               {activeActivityTab === 'all' ? 'All Activities' :
                activeActivityTab === 'calls' ? 'Notes & Calls' :
                activeActivityTab === 'tasks' ? 'Tasks' :
@@ -1049,23 +1461,35 @@ export default function CompanyProfile() {
             {activeActivityTab === 'all' && (
               <div className="space-y-3">
                 {data.activities.length === 0 ? (
-                  <div className="text-center py-12">
-                    <FileText className="mx-auto text-gray-300 mb-4" size={48} />
-                    <p className="text-gray-500">No activities associated with this record yet!</p>
+                  <div className={`text-center py-12 rounded-xl border transition-colors duration-300 ${
+                    isDarkMode 
+                      ? 'bg-gradient-to-br from-slate-800 to-slate-700 border-slate-600' 
+                      : 'bg-gradient-to-br from-gray-50 to-white border-gray-100'
+                  }`}>
+                    <FileText className={`mx-auto mb-4 ${isDarkMode ? 'text-slate-500' : 'text-gray-300'}`} size={48} />
+                    <p className={isDarkMode ? 'text-slate-400' : 'text-gray-500'}>No activities associated with this record yet!</p>
                   </div>
                 ) : (
                   data.activities.map(activity => (
-                    <div key={activity.id} className="bg-white p-3 rounded-lg border border-gray-200">
+                    <div key={activity.id} className={`p-4 rounded-xl border shadow-sm transition-all duration-200 ${
+                      isDarkMode 
+                        ? 'bg-gradient-to-r from-slate-800 to-slate-700 border-slate-600/60 hover:shadow-lg hover:border-blue-500' 
+                        : 'bg-gradient-to-r from-white to-gray-50 border-gray-200/60 hover:shadow-md hover:border-blue-200'
+                    }`}>
                       <div className="flex items-start space-x-3">
-                        <div className="p-2 bg-gray-100 rounded">
-                          {activity.type === 'call' && <Phone size={16} />}
-                          {activity.type === 'email' && <Mail size={16} />}
-                          {activity.type === 'note' && <FileText size={16} />}
-                          {activity.type === 'meeting' && <Calendar size={16} />}
+                        <div className="p-2 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg shadow-sm">
+                          {activity.type === 'call' && <Phone size={16} className="text-white" />}
+                          {activity.type === 'email' && <Mail size={16} className="text-white" />}
+                          {activity.type === 'note' && <FileText size={16} className="text-white" />}
+                          {activity.type === 'meeting' && <Calendar size={16} className="text-white" />}
                         </div>
                         <div className="flex-1">
-                          <p className="text-sm text-gray-900">{activity.content}</p>
-                          <p className="text-xs text-gray-500 mt-1">
+                          <p className={`text-sm leading-relaxed transition-colors duration-300 ${
+                            isDarkMode ? 'text-slate-200' : 'text-gray-900'
+                          }`}>{activity.content}</p>
+                          <p className={`text-xs mt-2 font-medium transition-colors duration-300 ${
+                            isDarkMode ? 'text-slate-400' : 'text-gray-500'
+                          }`}>
                             {activity.user} • {formatDateTime(activity.timestamp)}
                           </p>
                         </div>
@@ -1186,8 +1610,33 @@ export default function CompanyProfile() {
               </div>
             )}
           </div>
+          
+          {/* Copyright Notice */}
+          <div className={`mt-8 pt-4 border-t transition-colors duration-300 ${
+            isDarkMode ? 'border-slate-700/50' : 'border-gray-200/50'
+          }`}>
+            <p className={`text-xs text-center opacity-60 transition-colors duration-300 ${
+              isDarkMode ? 'text-slate-400' : 'text-gray-400'
+            }`}>
+              © Tanveer Krishna Kristam
+            </p>
+          </div>
         </div>
       </div>
+
+      {/* Mobile Overlays */}
+      {isLeftSidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          onClick={toggleLeftSidebar}
+        />
+      )}
+      {isRightSidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          onClick={toggleRightSidebar}
+        />
+      )}
 
       {/* Add Job Modal */}
       {showAddJobModal && (
