@@ -3,7 +3,7 @@
 A modern, fully functional Company Profile page for RecruitCRM built with Next.js 14, React 18, and Tailwind CSS. Features comprehensive dark mode support, responsive design, and enhanced user experience.
 
 ## 🚀 Live Demo
-[View Live Application](https://ktk69.github.io/RecruitCRM-/) - Deployed on GitHub Pages
+[View Live Application](https://recruit-crm.vercel.app/) - Deployed on Vercel
 
 ## ✨ Key Features
 
