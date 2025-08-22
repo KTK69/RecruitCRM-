@@ -1,9 +1,9 @@
 # RecruitCRM Company Profile - Next.js Application
 
-A modern, fully functional Company Profile page for RecruitCRM built with Next.js 14, React 18, and Tailwind CSS. Features comprehensive dark mode support, responsive design, and enhanced user experience.
+A modern, fully functional Company Profile page for RecruitCRM built with Next.js 14 (React framework), featuring comprehensive dark mode support, responsive design, and enhanced user experience.
 
 ## 🚀 Live Demo
-[View Live Application](https://ktk69.github.io/RecruitCRM-/) - Deployed on GitHub Pages
+[View Live Application](https://tanveer-krishna-recruit-crm.vercel.app) - Deployed on Vercel
 
 ## ✨ Key Features
 
@@ -42,11 +42,11 @@ A modern, fully functional Company Profile page for RecruitCRM built with Next.j
 
 ## 🛠️ Tech Stack
 
-- **Framework**: Next.js 14 with App Router
-- **Language**: React 18 with Hooks
+- **Framework**: Next.js 14 with App Router (React-based framework)
+- **React**: React 18 with Hooks for component logic
 - **Styling**: Tailwind CSS 3.3.0
 - **Icons**: Lucide React 0.292.0
-- **Deployment**: GitHub Pages
+- **Deployment**: Vercel Platform
 - **Development**: Hot reload with npm run dev
 
 ## 🚀 Quick Start
@@ -93,7 +93,7 @@ nextjs-wireframe/
 ├── public/                # Static assets and deployment files
 ├── tailwind.config.js     # Tailwind configuration
 ├── postcss.config.js      # PostCSS configuration
-├── next.config.js         # Next.js configuration with GitHub Pages support
+├── next.config.js         # Next.js configuration with Vercel optimization
 └── package.json          # Dependencies and scripts
 ```
 
@@ -180,17 +180,17 @@ nextjs-wireframe/
 
 ## 🌐 Deployment
 
-### GitHub Pages Setup
+### Vercel Deployment
 ```bash
-# Build and deploy to GitHub Pages
+# Build and deploy to Vercel
 npm run build
-npm run deploy
+vercel --prod
 ```
 
 ### Environment Configuration
-- **Base Path**: Configured for GitHub Pages deployment
-- **Static Export**: Next.js configured for static site generation
-- **Asset Optimization**: Images and assets optimized for production
+- **Platform**: Optimized for Vercel serverless deployment
+- **Build Output**: Next.js optimized build with server-side rendering
+- **Asset Optimization**: Automatic image and asset optimization
 
 ## 🔧 Browser Support & Performance
 
@@ -251,7 +251,7 @@ This application is **fully functional and production-ready** with:
 - ✅ Performance optimization
 - ✅ Cross-browser compatibility
 
-**Live Demo**: [https://ktk69.github.io/RecruitCRM-/](https://ktk69.github.io/RecruitCRM-/)
+**Live Demo**: [https://tanveer-krishna-recruit-crm.vercel.app](https://tanveer-krishna-recruit-crm.vercel.app)
 
 ---
 
